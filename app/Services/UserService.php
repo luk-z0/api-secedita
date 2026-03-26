@@ -109,7 +109,6 @@ class UserService
     }
     public function roles(): Collection
     {
-
         return Role::get();
     }
 

@@ -26,7 +26,6 @@ class AuthenticatedSessionController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type'   => 'Bearer',
-            'user'         => new UserResource($user),
         ], Response::HTTP_OK);
     }
 
@@ -38,5 +37,13 @@ class AuthenticatedSessionController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->noContent();
+    }
+
+    
+    public function me(Request $request): JsonResponse
+    {
+        return response()->json([
+            'user' => new UserResource($request->user()),
+        ], Response::HTTP_OK);
     }
 }
