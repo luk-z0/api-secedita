@@ -2,6 +2,4 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return ['Live' => 'Api is running!'];
-});
+require __DIR__ . '/auth.php';
