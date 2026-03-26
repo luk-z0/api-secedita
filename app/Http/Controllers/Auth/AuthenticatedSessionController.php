@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
         return response()->noContent();
     }
 
-    
+
     public function me(Request $request): JsonResponse
     {
         return response()->json([

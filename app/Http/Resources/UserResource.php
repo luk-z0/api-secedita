@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\RoleResource;
 
 class UserResource extends JsonResource
 {
@@ -21,6 +22,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'cpf' => $this->maskCpf($this->cpf),
             'position' => $this->position,
+            'roles' => RoleResource::collection($this->roles),
             'is_active' => true,
             'email_verified_at' => null,
             'created_at' => $this->created_at->format('Y-m-d')
