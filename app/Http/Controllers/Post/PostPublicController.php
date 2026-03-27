@@ -14,7 +14,7 @@ class PostPublicController extends Controller
     {
         $filters = $request->only(['category', 'author_id']);
 
-        $posts = $this->service->getPublicPosts($request->category);
+        $posts = $this->service->getPublicPosts($filters);
 
         return response()->json($posts);
     }

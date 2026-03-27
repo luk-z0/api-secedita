@@ -58,7 +58,7 @@ class PostService
         return Post::published()
             ->ofCategory($filters['category'] ?? null)
             ->byAuthor($filters['author_id'] ?? null)
-            ->with(['user:id,name'])
+            ->with(['user:id,first_name,last_name'])
             ->paginate(Post::PAGINATION_LIMIT);
     }
 

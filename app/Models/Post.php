@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\{Builder, Model, SoftDeletes};
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Post extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     const PAGINATION_LIMIT = 20;
 
@@ -29,7 +30,7 @@ class Post extends Model
         'published_at' => 'datetime',
     ];
 
-    public function author(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -55,4 +56,6 @@ class Post extends Model
     {
         return $query->when($userId, fn($q) => $q->where('user_id', $userId));
     }
+
+
 }
