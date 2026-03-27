@@ -41,7 +41,10 @@ class DatabaseSeeder extends Seeder
             $post->save();
         });
 
-
+        $this->call([
+            ServiceSeeder::class,
+            AppointmentSeeder::class,
+        ]);
 
     }
 }

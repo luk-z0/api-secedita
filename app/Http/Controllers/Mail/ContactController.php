@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Mail;
 
 use App\Mail\SupportContact;
 use App\Http\Requests\Mail\ContactMailRequest;
