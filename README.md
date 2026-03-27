@@ -1,66 +1,83 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Requisitos principais
+1. Docker
+Obrigatório
+Usado pelo Sail para subir containers (PHP, MySQL, Redis, etc.)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Instalação:
 
-## About Laravel
+Linux: sudo apt install docker.io
+Verificar:
+docker --version
+2. Docker Compose
+Necessário para orquestrar os containers
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Verificar:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+docker compose version
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Observação:
 
-## Learning Laravel
+Versões mais novas do Docker já incluem o Compose
+3. PHP (opcional)
+Não é obrigatório para rodar com Sail
+Mas útil para rodar comandos fora do container
+4. Composer
+Necessário para criar o projeto Laravel inicialmente
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Verificar:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+composer --version
+Criando um projeto Laravel 12 com Sail
+composer create-project laravel/laravel:^12.0 nome-do-projeto
+cd nome-do-projeto
+Instalando o Sail
+php artisan sail:install
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Durante a instalação você pode escolher:
 
-## Laravel Sponsors
+MySQL ou PostgreSQL
+Redis
+Mailpit
+Meilisearch
+Subindo o ambiente
+./vendor/bin/sail up -d
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Ou criar alias:
 
-### Premium Partners
+alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Depois:
 
-## Contributing
+sail up -d
+Rodando comandos dentro do container
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Exemplos:
 
-## Code of Conduct
+sail artisan migrate
+sail artisan key:generate
+sail npm install
+sail npm run dev
+Acessos padrão
+Aplicação: http://localhost
+Banco:
+host: mysql
+user: sail
+password: password
+Estrutura que o Sail sobe
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Containers comuns:
 
-## Security Vulnerabilities
+app (Laravel + PHP)
+mysql ou pgsql
+redis (opcional)
+mailpit (email fake)
+node (build frontend)
+Resumo direto
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Para rodar Laravel 12 com Sail você precisa apenas:
 
-## License
+Docker
+Docker Compose
+Composer
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Todo o resto roda dentro dos containers.
