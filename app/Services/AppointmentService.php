@@ -37,9 +37,8 @@ class AppointmentService
         return $appointment;
     }
 
-    public function restoreAppointment(int $id)
+    public function restoreAppointment(Appointment $appointment)
     {
-        $appointment = Appointment::onlyTrashed()->findOrFail($id);
         $appointment->restore();
         return $appointment;
     }

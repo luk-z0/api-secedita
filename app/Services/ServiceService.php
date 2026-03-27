@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\Service;
 use Illuminate\Support\Facades\DB;
 use Mews\Purifier\Facades\Purifier;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceService
 {
@@ -16,6 +18,22 @@ class ServiceService
         }
 
         return $query->orderBy('name', 'asc')->get();
+    }
+
+    public function findService(Service $service): Service
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $isAdmin = $user?->isAdmin() ?? false;
+
+        return $service->load([
+            'category:id,name,icon',
+            'requirements' => function ($query) use ($isAdmin) {
+                if (!$isAdmin) {
+                    $query->where('is_active', true);
+                }
+            }
+        ]);
     }
 
     public function createService(array $data)
@@ -31,15 +49,13 @@ class ServiceService
                 'sector'      => strip_tags($data['sector']),
                 'description' => $cleanDescription,
                 'is_active'   => $data['is_active'] ?? true,
-                'availability'=> $data['availability'] ?? null,
+                'availability' => $data['availability'] ?? null,
             ]);
         });
     }
 
-    public function updateService(int $id, array $data)
+    public function updateService(Service $service, array $data)
     {
-        $service = Service::findOrFail($id);
-
         if (isset($data['description'])) {
             $data['description'] = Purifier::clean($data['description']);
         }
