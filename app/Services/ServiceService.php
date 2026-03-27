@@ -24,16 +24,16 @@ class ServiceService
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        $isAdmin = $user?->isAdmin() ?? false;
 
-        return $service->load([
-            'category:id,name,icon',
-            'requirements' => function ($query) use ($isAdmin) {
-                if (!$isAdmin) {
-                    $query->where('is_active', true);
-                }
-            }
-        ]);
+        $query = Service::where('id', $service->id);
+
+        if (!$user?->isAdmin()) {
+            $query->where('is_active', true);
+        }
+
+        $service = $query->firstOrFail();
+
+        return $service;
     }
 
     public function createService(array $data)

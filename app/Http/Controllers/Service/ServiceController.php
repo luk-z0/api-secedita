@@ -22,7 +22,7 @@ class ServiceController extends Controller
 
         $services = $this->serviceService->listServices();
 
-        return response()->json($services);
+        return response()->json(['data' =>$services]);
     }
 
     public function show(Service $service)
@@ -30,7 +30,7 @@ class ServiceController extends Controller
         $this->authorize('view', $service);
         $services = $this->serviceService->findService($service);
 
-        return response()->json($services);
+        return response()->json(['data' => $services]);
     }
 
     public function store(ServiceRequest $request): Response
