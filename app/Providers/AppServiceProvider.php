@@ -33,5 +33,9 @@ class AppServiceProvider extends ServiceProvider
 
             return null;
         });
+
+        if (env('APP_ENV') == 'production') {
+            $url->forceScheme('https');
+        }
     }
 }
