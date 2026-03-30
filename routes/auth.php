@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\{AuthenticatedSessionController, EmailVerificationNotificationController, NewPasswordController, PasswordResetLinkController, RegisteredUserController, VerifyEmailController};
 
 Route::post('/register', [RegisteredUserController::class, 'store'])
-    ->middleware('guest')
     ->name('register');
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])
