@@ -2,15 +2,16 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 use App\Models\{Role, User};
 use App\Enums\RoleEnum;
 use App\Http\Requests\Auth\RegisteredUserRequest;
 use App\Http\Requests\User\{PaginationRequest, StoreUserRequest};
-use App\Http\Resources\RoleResource;
-use Exception;
+use App\Http\Resources\{RoleResource, UserResource};
 use Illuminate\Database\Eloquent\Collection;
+use Exception;
 
 class UserService
 {
@@ -37,18 +38,29 @@ class UserService
         return $user;
     }
 
-    public function getAll(PaginationRequest $request)
+    public function getAll(PaginationRequest $request): array
     {
         $perPage = $request->perPage ?? config('pagination.defaults.per_page');
 
-        return User::query()
-            ->latest()
-            ->paginate($perPage);
+        $users = User::query()
+        ->with(['roles'])
+        ->latest()
+        ->paginate($perPage);
+
+        return [
+            'data' => UserResource::collection($users),
+            'current_page' => $users->currentPage(),
+            'last_page' => $users->lastPage(),
+            'per_page' => $users->perPage(),
+            'total' => $users->total(),
+            'next_page_url' => $users->nextPageUrl(),
+            'prev_page_url' => $users->previousPageUrl(),
+        ];
     }
 
-    public function getById(User $user): User
+    public function getById(User $user): UserResource
     {
-        return $user;
+        return new UserResource($user);
     }
 
     public function create(StoreUserRequest $request): User
