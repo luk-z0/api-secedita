@@ -4,6 +4,10 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
+use App\Rules\CpfValidation;
+use App\Models\User;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -23,9 +27,19 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => 'sometimes|string|max:255',
-            "email" => 'sometimes|email|unique:users,email,' . $this->route('user'),
-            "password" => 'sometimes|string|min:8',
+            'first_name' => ['sometimes', 'string', 'max:255'],
+            'last_name'  => ['sometimes', 'string', 'max:255'],
+            'email' => [
+                'sometimes',
+                'string',
+                'lowercase',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($this->user)
+            ],
+            'password'   => ['sometimes', 'confirmed', Password::defaults()],
+            'position'   => ['sometimes', 'nullable', 'string', 'max:255'],
+            'is_active'  => ['sometimes', 'boolean']
         ];
     }
 }

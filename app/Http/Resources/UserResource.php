@@ -20,19 +20,12 @@ class UserResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'email' => $this->email,
-            'cpf' => $this->maskCpf($this->cpf),
+            'cpf' => $this->cpf,
             'position' => $this->position,
             'roles'    => $this->roles->pluck('name'),
-            'is_active' => true,
+            'is_active' => $this->is_active,
             'email_verified_at' => null,
             'created_at' => $this->created_at->format('Y-m-d')
         ];
-    }
-
-    private function maskCpf($cpf)
-    {
-        $cpf = preg_replace('/\D/', '', $cpf);
-
-        return '***.' . substr($cpf, 3, 3) . '.' . substr($cpf, 6, 3) . '-**';
     }
 }
