@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'cpf' => $this->maskCpf($this->cpf),
             'position' => $this->position,
-            'roles' => RoleResource::collection($this->roles),
+            'roles'    => $this->roles->pluck('name'),
             'is_active' => true,
             'email_verified_at' => null,
             'created_at' => $this->created_at->format('Y-m-d')

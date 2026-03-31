@@ -26,6 +26,7 @@ class AuthenticatedSessionController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type'   => 'Bearer',
+            'user' => new UserResource(Auth::user())
         ], Response::HTTP_OK);
     }
 
