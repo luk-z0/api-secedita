@@ -39,12 +39,4 @@ class AuthenticatedSessionController extends Controller
 
         return response()->noContent();
     }
-
-
-    public function me(Request $request): JsonResponse
-    {
-        return response()->json([
-            'user' => new UserResource($request->user()),
-        ], Response::HTTP_OK);
-    }
 }

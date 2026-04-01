@@ -7,13 +7,12 @@ use App\Http\Controllers\Mail\ContactController;
 
 require __DIR__ . '/posts.php';
 require __DIR__ . '/appointment.php';
+require __DIR__ . '/auth.php';
 
 
 Route::prefix('users')
     ->middleware('auth:sanctum')
     ->group(__DIR__ . '/users.php');
-
-Route::middleware('auth:sanctum')->get('/user', [AuthenticatedSessionController::class, 'me']);
 
 Route::post('/contact', [ContactController::class, 'send']);
 
