@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use Illuminate\Http\JsonResponse;
-use App\Http\Requests\User\{PaginationRequest, StoreUserRequest, ToggleStatusUserRequest, UpdateUserRequest};
+use App\Http\Requests\User\{PaginationRequest, StoreUserRequest, ToggleStatusUserRequest, UpdateUserRequest,UpdateRoleRequest};
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RoleResource;
 use App\Models\{Role, User};
@@ -93,7 +93,6 @@ class UserController extends Controller
     public function updateRole(User $user, UpdateRoleRequest $request): JsonResponse
     {
         $this->authorize('update-user-role', $user);
-
         return response()->json(
             $this->service->updateRole($user, $request->validated()),
             Response::HTTP_OK

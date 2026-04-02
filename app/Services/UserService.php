@@ -124,17 +124,22 @@ class UserService
         return Role::get();
     }
 
-    public function updateRole(User $user, array $role): User
+    public function updateRole(User $user, array $data): User
     {
-        $validRoles = array_filter($roles, fn($role) => RoleEnum::tryFrom($role) !== null);
+        $roleName = $data['role'] ?? null;
+        $enumValue = RoleEnum::tryFrom($roleName);
 
-        if (empty($validRoles)) {
-            abort(422);
+        if (!$enumValue) {
+            abort(422, "The provided role '{$roleName}' is invalid.");
         }
 
-        $roleIds = Role::whereIn('name', $validRoles)->pluck('id')->toArray();
+        $role = Role::where('name', $enumValue->value)->first();
 
-        $user->roles()->sync($roleIds);
+        if (!$role) {
+          abort(404, "Role record not found in the database.");
+        }
+
+        $user->roles()->sync([$role->id]);
 
         return $user->load('roles');
     }
