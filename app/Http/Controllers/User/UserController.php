@@ -90,12 +90,12 @@ class UserController extends Controller
         );
     }
 
-    public function updateRole(User $user, Role $role): JsonResponse
+    public function updateRole(User $user, UpdateRoleRequest $request): JsonResponse
     {
         $this->authorize('update-user-role', $user);
 
         return response()->json(
-            $this->service->updateRole($user, $role),
+            $this->service->updateRole($user, $request->validated()),
             Response::HTTP_OK
         );
     }

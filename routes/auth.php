@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\{AuthenticatedSessionController, EmailVerificationNotificationController, NewPasswordController, PasswordResetLinkController, RegisteredUserController, VerifyEmailController};
 
 Route::post('/register', [RegisteredUserController::class, 'store'])

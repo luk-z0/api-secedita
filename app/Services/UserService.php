@@ -124,9 +124,17 @@ class UserService
         return Role::get();
     }
 
-    public function updateRole(User $user, Role $role): User
+    public function updateRole(User $user, array $role): User
     {
-        $user->roles()->sync([$role->id]);
+        $validRoles = array_filter($roles, fn($role) => RoleEnum::tryFrom($role) !== null);
+
+        if (empty($validRoles)) {
+            abort(422);
+        }
+
+        $roleIds = Role::whereIn('name', $validRoles)->pluck('id')->toArray();
+
+        $user->roles()->sync($roleIds);
 
         return $user->load('roles');
     }

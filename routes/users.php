@@ -9,7 +9,7 @@ Route::get('roles', [UserController::class, 'roles'])->name('users.roles');
 Route::prefix('{user}')->group(function () {
     Route::put('toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
     Route::patch('restore', [UserController::class, 'restore'])->name('users.restore');
-    Route::patch('update-role/{role}', [UserController::class, 'updateRole'])->name('users.update-role');
+    Route::patch('update-role', [UserController::class, 'updateRole'])->name('users.update-role');
     Route::delete('force-delete', [UserController::class, 'forceDelete'])->name('users.force-delete');
 });
 

@@ -6,22 +6,22 @@ services:
       target: dev
       args:
         WWWGROUP: '${WWWGROUP}'
-    image: sail-8.5/app
-    container_name: laravel-dev
+    container_name: laravel
     volumes:
       - .:/var/www/html
-    expose:
-      - "9000"
     env_file:
       - .env
     networks:
-      - sail
+      - portal-secedita
     depends_on:
       - redis
-
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+      
   nginx:
     image: nginx:alpine
-    container_name: nginx-dev
+    container_name: nginx
     ports:
       - "8080:80"
     volumes:
@@ -30,33 +30,35 @@ services:
     depends_on:
       - laravel
     networks:
-      - sail
+      - portal-secedita
 
   mailpit:
     image: axllent/mailpit:latest
+    container_name: mailpit
     ports:
       - "1025:1025"
       - "8025:8025"
     networks:
-      - sail
+      - portal-secedita
 
   redis:
     image: redis:alpine
+    container_name: redis
     ports:
       - "6379:6379"
     volumes:
-      - sail-redis:/data
+      - portal-secedita-redis:/data
     networks:
-      - sail
+      - portal-secedita
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       retries: 3
       timeout: 5s
 
 networks:
-  sail:
+  portal-secedita:
     driver: bridge
 
 volumes:
-  sail-redis:
+  portal-secedita-redis:
     driver: local
