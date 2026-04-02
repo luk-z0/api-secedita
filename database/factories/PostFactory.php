@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,18 +18,29 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
+        $temas = ['education', 'school', 'classroom', 'teacher', 'students', 'learning'];
+        $keyword = fake()->randomElement($temas);
+
+        $imageUrl = "https://images.unsplash.com/photo-" . fake()->numberBetween(1500000000000, 1600000000000) . "?auto=format&fit=crop&q=80&w=800&h=600&keyword={$keyword}";
+
         return [
-            'title'        => fake()->sentence(),
-            'summary'      => fake()->paragraph(2),
+            'title'        => fake()->randomElement([
+                'Inauguração da nova Escola Municipal em Itapissuma',
+                'Secretaria de Educação anuncia novo calendário escolar',
+                'Professores da rede municipal participam de capacitação',
+                'Alunos de Itapissuma se destacam em Olimpíada de Matemática',
+                'Projeto de leitura nas escolas amplia acervo bibliográfico',
+            ]) . ' - ' . fake()->sentence(3),
+            'summary'      => 'A Prefeitura de Itapissuma, através da SEDUC, informa: ' . fake()->paragraph(2),
             'content'      => fake()->paragraphs(5, true),
-            'image_url'    => fake()->imageUrl(800, 600, 'education'),
+            'image_url'    => $imageUrl,
             'file_url'     => null,
             'category'     => fake()->randomElement(['Notícias', 'Eventos', 'Comunicados']),
-            'sub_category' => fake()->word(),
+            'sub_category' => fake()->randomElement(['Ensino Fundamental', 'Educação Infantil', 'EJA', 'Esportes']),
             'department'   => 'Secretaria de Educação',
-            'published_at' => fake()->dateTimeBetween('-1 year', 'now'),
-            'status'       => fake()->randomElement(['draft', 'published']),
-            'user_id' => \App\Models\User::inRandomOrder()->first()->id ?? \App\Models\User::factory(),
+            'published_at' => fake()->dateTimeBetween('-6 months', 'now'),
+            'status'       => 'published',
+            'user_id'      =>  User::factory(),
         ];
     }
 }

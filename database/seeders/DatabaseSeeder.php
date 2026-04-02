@@ -35,10 +35,9 @@ class DatabaseSeeder extends Seeder
 
         $allUsers = $users->concat([$admin]);
 
-        Post::factory(50)->make()->each(function ($post) use ($users) {
-            $post->user_id = $users->random()->id;
-            $post->save();
-        });
+        Post::factory(50)->create([
+            'user_id' => fn () => $allUsers->random()->id,
+        ]);
 
         $this->call([
             ServiceSeeder::class,
