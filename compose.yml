@@ -17,8 +17,8 @@ services:
       - redis
     dns:
       - 8.8.8.8
-      - 8.8.4.4
-      
+      - 1.1.1.1
+
   nginx:
     image: nginx:alpine
     container_name: nginx

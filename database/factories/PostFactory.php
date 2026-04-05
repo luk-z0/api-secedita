@@ -18,10 +18,8 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
-        $temas = ['education', 'school', 'classroom', 'teacher', 'students', 'learning'];
-        $keyword = fake()->randomElement($temas);
-
-        $imageUrl = "https://images.unsplash.com/photo-" . fake()->numberBetween(1500000000000, 1600000000000) . "?auto=format&fit=crop&q=80&w=800&h=600&keyword={$keyword}";
+        $topic = ['education', 'school', 'classroom', 'teacher', 'students', 'learning'];
+        $keyword = fake()->randomElement($topic);
 
         return [
             'title'        => fake()->randomElement([
@@ -33,7 +31,7 @@ class PostFactory extends Factory
             ]) . ' - ' . fake()->sentence(3),
             'summary'      => 'A Prefeitura de Itapissuma, através da SEDUC, informa: ' . fake()->paragraph(2),
             'content'      => fake()->paragraphs(5, true),
-            'image_url'    => $imageUrl,
+            'image_url'    => fake()->imageUrl(640, 480, $keyword, true),
             'file_url'     => null,
             'category'     => fake()->randomElement(['Notícias', 'Eventos', 'Comunicados']),
             'sub_category' => fake()->randomElement(['Ensino Fundamental', 'Educação Infantil', 'EJA', 'Esportes']),
