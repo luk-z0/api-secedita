@@ -1,4 +1,4 @@
-FROM php:8.5-fpm-alpine AS base
+FROM php:8.3-fpm-alpine AS base
 
 RUN apk add --no-cache \
     libpng-dev \
@@ -32,19 +32,13 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 FROM base AS dev
-
 RUN apk add --no-cache git
-
 COPY . .
-
 RUN composer install
-
 EXPOSE 9000
 
 FROM base AS build
-
 RUN apk add --no-cache git unzip
-
 WORKDIR /app
 
 COPY composer.json composer.lock ./
@@ -52,17 +46,19 @@ COPY composer.json composer.lock ./
 RUN composer install \
     --no-dev \
     --optimize-autoloader \
-    --no-interaction
+    --no-interaction \
+    --no-scripts
 
 COPY . .
 
-RUN php artisan config:cache && \
+RUN APP_KEY=base64:$(openssl rand -base64 32) composer run-script post-autoload-dump && \
+    APP_KEY=base64:$(openssl rand -base64 32) php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache
 
-FROM php:8.5-fpm-alpine AS prod
+FROM php:8.3-fpm-alpine AS prod
 
-ARG WWWGROUP
+ARG WWWGROUP=1000
 
 RUN apk add --no-cache \
     libpng \
@@ -76,16 +72,11 @@ RUN apk add --no-cache \
 COPY --from=base /usr/local/lib/php/extensions /usr/local/lib/php/extensions
 COPY --from=base /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
 
-RUN addgroup -g ${WWWGROUP:-1000} sail \
+RUN addgroup -g ${WWWGROUP} sail \
     && adduser -D -G sail -u 1000 sail
 
 WORKDIR /var/www/html
 
-COPY --from=build /app /var/www/html
+COPY --from=build --chown=sail:sail /app /var/www/html
 
-RUN chown -R sail:sail /var/www/html \
-    && chmod -R 775 storage bootstrap/cache
-
-USER sail
-
-EXPOSE 9000
+RUN chmod -R 775 /var
