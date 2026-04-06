@@ -84,4 +84,5 @@ return [
         'validate_csrf_token' => ValidateCsrfToken::class,
     ],
 
+    'routes' => false,
 ];
